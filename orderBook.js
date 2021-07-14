@@ -1,5 +1,16 @@
 // create a `reconcileOrder` function which will properly reconcile an incoming cryptocurrency order given the existing book of orders.
-function reconcileOrder()
+function reconcileOrder() {
+  let existingBook = []
+  let incomingOrder = { type: 'sell', quantity: 10, price: 6150 }
+  let updatedBook = reconcileOrder(existingBook, incomingOrder)
+
+  if (incomingOrder.type === 'sell') {
+    // add 6150 at quantity of 10 to the existingBook array
+  }
+
+  return reconcileOrder
+
+}
 
 // if statements, buy or sell?
 
