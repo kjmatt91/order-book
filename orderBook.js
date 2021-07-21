@@ -1,20 +1,31 @@
-// create a `reconcileOrder` function which will properly reconcile an incoming cryptocurrency order given the existing book of orders.
 function reconcileOrder(existingBook, incomingOrder) {
-  let returnBook = []
+  let updatedBook = []
 
-  for (let i = 0; i < existingBook.length; i++) {
-    // if order i'm looking at is equal to other order i'm looking at - no deal
-    if (incomingOrder.type !== existingBook[i].type && incomingOrder.price === existingBook[i].price) {
-      // if incoming is buy - subtract from existing book
-      // if incoming is sell - subtract existing book from incoming order
-      // if there's anything leftover on both orders  - both are added to book
-      // if there's anything leftover on one order - only that order gets added to the book 
-    }
-    // else - push existing book order in
-
+  if (existingBook.length <= 0) {
+    // console.log(updatedBook.concat(incomingOrder))
+    return updatedBook.concat(incomingOrder)
   }
 
-  return returnBook
+  for (let i = 0; i < existingBook.length; i++) {
+    if (incomingOrder.type !== existingBook[i].type && incomingOrder.price === existingBook[i].price) {
+      return true
+    }
+    if (incomingOrder.type === 'buy') {
+      let existingBook = existingBook.push(incomingOrder)
+    }
+    if (incomingOrder.type === 'sell' && incomingOrder.quantity >= existingBook[i].quantity &&
+    incomingOrder.price === existingBook[i].price) {
+      updatedBook.push(incomingOrder)
+    }
+    // if there's anything leftover on both orders  - both are added to book
+    // if there's anything leftover on one order - only that order gets added to the book 
+    // else - push existing book order in
+    else {
+      updatedBook = existingBook.concat(incomingOrder)
+    }
+  }
+
+  return updatedBook
 }
 
 
