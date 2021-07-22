@@ -1,50 +1,47 @@
+/* eslint-disable max-len */
 function reconcileOrder(existingBook, incomingOrder) {
   let updatedBook = []
 
-  if (existingBook.length <= 0) {// works - don't change
-    // console.log(updatedBook.concat(incomingOrder))
+  if (existingBook.length <= 0) {
     return existingBook.concat(incomingOrder)
   }
 
   for (let i = 0; i < existingBook.length; i++) {
-    if (incomingOrder.type === existingBook[i].type) {// works - don't change
+    if (incomingOrder.type === existingBook[i].type) {
       existingBook.push(incomingOrder)
 
       return existingBook
     }
 
-    if ((incomingOrder.type !== existingBook[i].type) && (incomingOrder.price !== existingBook[i].price)) {// works - don't change
+    if ((incomingOrder.type !== existingBook[i].type) && (incomingOrder.price !== existingBook[i].price)) {
       existingBook.push(incomingOrder)
 
       return existingBook
     }
-    // eslint-disable-next-line max-len
-    if ((incomingOrder.type !== existingBook[i].type) && (incomingOrder.price >= existingBook[i].price) || (incomingOrder.price <= existingBook[i].price)) {
-      if (incomingOrder.type === 'buy') {
-        existingBook.push(incomingOrder)
+    if ((incomingOrder.type !== existingBook[i].type) && (incomingOrder.price === existingBook[i].price) && (incomingOrder.quantity === existingBook[i].quantity)) {
+      existingBook.splice(i, 1)
 
-        return existingBook
-      }
-      if (incomingOrder.type === 'sell' && incomingOrder.quantity >= existingBook[i].quantity &&
-      incomingOrder.price === existingBook[i].price) {
-        updatedBook.push(incomingOrder)
-      }
-      // if (incomingOrder.quantity === existingBook[i].quantity && incomingOrder.price === existingBook[i].price) {
-      //   let existingBook = existingBook.splice(existingBook[i], 1)
-
-      //   i--
-      // }
-      if (existingBook.includes(incomingOrder)) {
-        return updatedBook.splice(existingBook[i])
-      }
+      return existingBook
     }
-    else {
-      return existingBook.concat(incomingOrder)
+    if ((incomingOrder.type !== existingBook[i].type) && (incomingOrder.price === existingBook[i].price) && (incomingOrder.quantity < existingBook[i].quantity)) {
+      existingBook[i].quantity -= incomingOrder.quantity
+      existingBook.push(...existingBook.splice(i, 1))
+
+      return existingBook
+    }
+    if ((incomingOrder.type !== existingBook[i].type) && (incomingOrder.price === existingBook[i].price) && (incomingOrder.quantity > existingBook[i].quantity)) {
+      incomingOrder.quantity -= existingBook[i].quantity
+
+      existingBook.splice(i, 1)
+
+      return reconcileOrder(existingBook, incomingOrder)
     }
   }
 
   return updatedBook
 }
+
+
 
 
 module.exports = reconcileOrder
